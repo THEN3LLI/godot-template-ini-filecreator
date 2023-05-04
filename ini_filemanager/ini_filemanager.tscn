@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmkfguiit3jfh"]
+
+[sub_resource type="GDScript" id="GDScript_4gogr"]
+resource_name = "ini_filemanager"
+script/source = "extends Node
+
+
+var ini_path = \"user://\"
+var ini_name = \"default.ini\"
+var ini_keystored = 1
+var ini_configfile = ConfigFile.new()
+
+
+func _set_ini_path(path):
+	ini_path = path
+	
+func _set_ini_name(name):
+	ini_name = name
+	
+func _save_ini():
+	ini_configfile.save(ini_path)
+	
+func _load_ini():
+	var err = ini_configfile.load(ini_path+ini_name)
+	if err != OK:
+		print(\"no ini file found at: \" + ini_path)
+	else:
+		print(\"ini file loaded correctly\")
+	
+func _read_keys(section, key, readall):
+	if readall:
+		for i in ini_keystored:
+			var value_from_ini = ini_configfile.get_value(section, key)
+			return value_from_ini
+	else:
+		return ini_configfile.get_value(section, key)
+		
+func _write_keys(section, key, value):
+	ini_configfile.set_value(section, key, value)
+"
+
+[node name="Ini_filemanager" type="Node"]
+script = SubResource("GDScript_4gogr")
